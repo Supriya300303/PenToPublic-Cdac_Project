@@ -1,4 +1,4 @@
-# 📚 Bookies – Online Book Publishing & Reading Platform
+# 📚 PenToPublic – Online Book Publishing & Reading Platform
 
 Bookies is a full-stack web application that allows **Authors** to publish books/eBooks, **Readers** to buy or rent and read them, and **Admins** to monitor platform activity and user analytics.
 
