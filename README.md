@@ -46,7 +46,4 @@ Bookies is a full-stack web application that allows **Authors** to publish books
 - 📚 Book Categorization
 - 🧾 Admin Analytics Dashboard
 
----
-
-## 🏗️ Folder Structure
 
