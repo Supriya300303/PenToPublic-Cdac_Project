@@ -15,6 +15,54 @@ import { fetchAuthorBooks, uploadBook } from "../services/authorService";
 import AuthorHeader from "@/components/Header/AuthorHeader";
 import Footer from "@/layout/Footer";
 
+// Custom CSS for the new color scheme
+const customStyles = `
+  .bg-off-white {
+    background-color: #f5f5dc; /* Off-white */
+  }
+
+  .text-brown {
+    color: #4b2c20; /* Dark brown */
+  }
+
+  .card-brown-border {
+    border-color: #4b2c20 !important;
+  }
+
+  .btn-brown {
+    background-color: #a0522d; /* Sienna brown */
+    border-color: #a0522d;
+    color: white;
+  }
+
+  .btn-brown:hover {
+    background-color: #8b4513; /* Saddle brown */
+    border-color: #8b4513;
+  }
+
+  .table-brown thead th {
+    background-color: #d2b48c; /* Tan */
+    color: #4b2c20;
+    border-color: #4b2c20;
+  }
+
+  .table-brown tbody tr {
+    color: #4b2c20;
+  }
+
+  .table-brown tbody tr:nth-of-type(odd) {
+    background-color: rgba(210, 180, 140, 0.2);
+  }
+
+  .form-control-brown {
+    border-color: #a0522d;
+  }
+
+  .form-control-brown:focus {
+    border-color: #8b4513;
+    box-shadow: 0 0 0 0.25rem rgba(160, 82, 45, 0.25);
+  }
+`;
 
 const AuthorDashboard = () => {
   const { user } = useAuth();
@@ -95,14 +143,15 @@ const AuthorDashboard = () => {
 
   return (
     <>
+      <style>{customStyles}</style>
       <AuthorHeader />
 
-      <Container className="py-5">
-        <h2 className="mb-4 text-center">✍️ Author Dashboard</h2>
+      <Container fluid className="py-5 bg-off-white">
+        <h2 className="mb-4 text-center text-brown">✍️ Author Dashboard</h2>
 
         {/* Upload Book Section */}
-        <Card className="p-4 mb-5 shadow-sm">
-          <h4 className="mb-3">📤 Upload New Book</h4>
+        <Card className="p-4 mb-5 shadow-sm card-brown-border mx-auto" style={{ maxWidth: '800px' }}>
+          <h4 className="mb-3 text-brown">📤 Upload New Book</h4>
 
           {uploadSuccess && (
             <Alert
@@ -118,59 +167,64 @@ const AuthorDashboard = () => {
             <Row className="mb-3">
               <Col md={6}>
                 <Form.Group>
-                  <Form.Label>Title</Form.Label>
+                  <Form.Label className="text-brown">Title</Form.Label>
                   <Form.Control
                     name="title"
                     value={form.title}
                     onChange={handleChange}
                     required
+                    className="form-control-brown"
                   />
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group>
-                  <Form.Label>Cover Image URL</Form.Label>
+                  <Form.Label className="text-brown">Cover Image URL</Form.Label>
                   <Form.Control
                     name="frontPageLink"
                     value={form.frontPageLink}
                     onChange={handleChange}
                     required
+                    className="form-control-brown"
                   />
                 </Form.Group>
               </Col>
             </Row>
 
             <Form.Group className="mb-3">
-              <Form.Label>Description</Form.Label>
+              <Form.Label className="text-brown">Description</Form.Label>
               <Form.Control
                 as="textarea"
                 rows={3}
                 name="description"
                 value={form.description}
                 onChange={handleChange}
+                className="form-control-brown"
               />
             </Form.Group>
 
             <Row className="mb-3">
               <Col md={6}>
                 <Form.Group>
-                  <Form.Label>PDF Link</Form.Label>
+                  <Form.Label className="text-brown">PDF Link</Form.Label>
                   <Form.Control
                     name="pdfPath"
                     value={form.pdfPath}
                     onChange={handleChange}
                     required
+                    className="form-control-brown"
                   />
                 </Form.Group>
               </Col>
               <Col md={6}>
                 {form.isAudioBook && (
                   <Form.Group>
-                    <Form.Label>Audio Link</Form.Label>
+                    <Form.Label className="text-brown">Audio Link</Form.Label>
                     <Form.Control
                       name="audioPath"
                       value={form.audioPath}
                       onChange={handleChange}
+                      className="form-control-brown"
                     />
                   </Form.Group>
                 )}
@@ -184,6 +238,7 @@ const AuthorDashboard = () => {
               label="Free Book"
               checked={form.isFree}
               onChange={handleChange}
+              className="text-brown"
             />
             <Form.Check
               inline
@@ -192,10 +247,11 @@ const AuthorDashboard = () => {
               label="Audio Book"
               checked={form.isAudioBook}
               onChange={handleChange}
+              className="text-brown"
             />
 
             <div className="mt-4">
-              <Button type="submit" variant="primary">
+              <Button type="submit" variant="primary" className="btn-brown">
                 🚀 Upload Book
               </Button>
             </div>
@@ -203,13 +259,13 @@ const AuthorDashboard = () => {
         </Card>
 
         {/* Book List Section */}
-        <Card className="p-4 shadow-sm">
-          <h4 className="mb-3">📚 Your Uploaded Books</h4>
+        <Card className="p-4 shadow-sm card-brown-border mx-auto" style={{ maxWidth: '800px' }}>
+          <h4 className="mb-3 text-brown">📚 Your Uploaded Books</h4>
 
           {books.length === 0 ? (
-            <p>No books uploaded yet.</p>
+            <p className="text-brown">No books uploaded yet.</p>
           ) : (
-            <Table striped bordered hover responsive>
+            <Table striped bordered hover responsive className="table-brown">
               <thead>
                 <tr>
                   <th>#</th>

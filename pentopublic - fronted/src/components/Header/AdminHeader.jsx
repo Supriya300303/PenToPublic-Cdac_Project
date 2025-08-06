@@ -1,7 +1,7 @@
 import { LogOut, User, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const AdminHeader = () => {
   const { user, logout } = useAuth();
@@ -9,21 +9,22 @@ const AdminHeader = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropdownOpen(false);
       }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
-  // Redirect to login after logout
   const handleLogout = () => {
-    logout(); // ✅ Clears user from state and localStorage
-    navigate("/login", { replace: true });
+    logout();
+    navigate("/login");
   };
 
   const handleProfileClick = () => {
@@ -32,14 +33,7 @@ const AdminHeader = () => {
   };
 
   return (
-    <header className="bg-white shadow px-6 py-3 flex justify-between items-center border-b sticky top-0 z-20">
-      <h1
-        className="text-2xl font-bold cursor-pointer text-blue-600"
-        onClick={() => navigate("/admin-dashboard")}
-      >
-        Admin Panel 🛠️
-      </h1>
-
+    <header className="bg-white shadow px-6 py-3 flex justify-end items-center border-b sticky top-0 z-20">
       <div className="relative" ref={dropdownRef}>
         <button
           onClick={() => setDropdownOpen(!dropdownOpen)}

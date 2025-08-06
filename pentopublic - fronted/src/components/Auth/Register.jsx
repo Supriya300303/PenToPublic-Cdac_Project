@@ -1,156 +1,7 @@
-// import { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { registerUser } from "../../services/authService";
-
-// const Register = () => {
-//   const navigate = useNavigate();
-
-//   const [formData, setFormData] = useState({
-//     userName: "",
-//     email: "",
-//     password: "",
-//     role: "reader", // default
-//     bio: "",
-//     isSubscribed: false,
-//   });
-
-//   const [error, setError] = useState("");
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setError("");
-
-//     // Capture needed values before async call
-//     const { email, role, isSubscribed } = formData;
-
-//     try {
-//       await registerUser(formData);
-
-//       // Redirect based on role and subscription status
-//       if (role === "reader" && isSubscribed) {
-//         navigate("/subscription", {
-//           state: { email }, // pass email to subscription page
-//         });
-//       } else {
-//         navigate("/login");
-//       }
-//     } catch (err) {
-//       setError("Registration failed. Try a different username or email.");
-//     }
-//   };
-
-//   return (
-//     <div className="min-h-screen bg-[#fdf4e4] flex items-center justify-center px-4">
-//       <form
-//         onSubmit={handleSubmit}
-//         className="bg-white shadow-md rounded-2xl p-6 w-full max-w-sm space-y-4"
-//       >
-//         <h2 className="text-2xl font-serif font-bold text-center">Register</h2>
-//         {error && <p className="text-red-500 text-sm">{error}</p>}
-
-//         <input
-//           type="text"
-//           placeholder="Username"
-//           value={formData.userName}
-//           onChange={(e) =>
-//             setFormData({ ...formData, userName: e.target.value })
-//           }
-//           className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-//           required
-//         />
-
-//         <input
-//           type="email"
-//           placeholder="Email"
-//           value={formData.email}
-//           onChange={(e) =>
-//             setFormData({ ...formData, email: e.target.value })
-//           }
-//           className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-//           required
-//         />
-
-//         <input
-//           type="password"
-//           placeholder="Password"
-//           value={formData.password}
-//           onChange={(e) =>
-//             setFormData({ ...formData, password: e.target.value })
-//           }
-//           className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-//           required
-//         />
-
-//         <select
-//           value={formData.role}
-//           onChange={(e) => {
-//             const role = e.target.value;
-//             setFormData({
-//               ...formData,
-//               role,
-//               bio: "",
-//               isSubscribed: false,
-//             });
-//           }}
-//           className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-//           required
-//         >
-//           <option value="reader">reader</option>
-//           <option value="author">author</option>
-//           <option value="admin">admin</option>
-//         </select>
-
-//         {formData.role === "author" && (
-//           <textarea
-//             placeholder="Author Bio"
-//             value={formData.bio}
-//             onChange={(e) =>
-//               setFormData({ ...formData, bio: e.target.value })
-//             }
-//             className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-//             required
-//           />
-//         )}
-
-//         {formData.role === "reader" && (
-//           <label className="text-sm flex items-center gap-2">
-//             <input
-//               type="checkbox"
-//               checked={formData.isSubscribed}
-//               onChange={(e) =>
-//                 setFormData({
-//                   ...formData,
-//                   isSubscribed: e.target.checked,
-//                 })
-//               }
-//             />
-//             Subscribe to newsletters and premium content
-//           </label>
-//         )}
-
-//         <button
-//           type="submit"
-//           className="w-full bg-black text-white py-2 rounded-xl hover:bg-gray-900 transition"
-//         >
-//           Register
-//         </button>
-
-//         <div className="text-sm text-center">
-//           Already have an account?{" "}
-//           <a href="/login" className="text-blue-600 hover:underline">
-//             Login
-//           </a>
-//         </div>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default Register;
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { registerUser } from "../../services/authService";
-import { Eye, EyeOff, AlertCircle, CheckCircle } from "lucide-react";
+import { Eye, EyeOff, AlertCircle, CheckCircle, Sun, Moon } from "lucide-react";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -168,6 +19,32 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [theme, setTheme] = useState('light'); // State for theme
+
+  // Effect to set initial theme from localStorage or system preference
+  useEffect(() => {
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme) {
+      setTheme(storedTheme);
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setTheme('dark');
+    }
+  }, []);
+
+  // Effect to apply theme class to documentElement and save to localStorage
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  // Function to toggle theme
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
 
   // Validation functions
   const validateUsername = (username) => {
@@ -312,16 +189,25 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#fdf4e4] flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-off-white-light dark:bg-brown-dark flex items-center justify-center px-4 py-8">
       <form
         onSubmit={handleSubmit}
-        className="bg-white shadow-md rounded-2xl p-6 w-full max-w-sm space-y-4"
+        className="bg-white dark:bg-brown-700 shadow-md rounded-2xl p-6 w-full max-w-sm space-y-4"
       >
-        <h2 className="text-2xl font-serif font-bold text-center">Register</h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-serif font-bold text-brown-dark dark:text-off-white">Register</h2>
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="p-2 rounded-full text-brown-dark dark:text-off-white hover:bg-brown-100 dark:hover:bg-brown-600 transition-colors duration-200"
+          >
+            {theme === 'dark' ? <Sun className="h-6 w-6" /> : <Moon className="h-6 w-6" />}
+          </button>
+        </div>
         
         {/* General Error */}
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center space-x-2">
+          <div className="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-200 px-4 py-3 rounded-lg flex items-center space-x-2">
             <AlertCircle className="h-4 w-4 flex-shrink-0" />
             <span className="text-sm">{error}</span>
           </div>
@@ -334,15 +220,16 @@ const Register = () => {
             placeholder="Username"
             value={formData.userName}
             onChange={(e) => handleInputChange("userName", e.target.value)}
-            className={`w-full px-4 py-2 border rounded-lg transition-colors ${
-              fieldErrors.userName 
-                ? "border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-200" 
-                : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
-            } focus:outline-none focus:ring-2`}
+            className={`w-full px-4 py-2 border rounded-lg transition-colors 
+              ${fieldErrors.userName 
+                ? "border-red-500 bg-red-50 dark:bg-red-900 focus:border-red-500 focus:ring-red-200" 
+                : "border-brown-300 dark:border-brown-500 focus:border-brown-500 dark:focus:border-brown-400 focus:ring-brown-200 dark:focus:ring-brown-600"
+              } 
+              bg-off-white dark:bg-brown-800 text-brown-dark dark:text-off-white focus:outline-none focus:ring-2`}
             required
           />
           {fieldErrors.userName && (
-            <p className="text-red-500 text-xs mt-1 flex items-center space-x-1">
+            <p className="text-red-500 dark:text-red-300 text-xs mt-1 flex items-center space-x-1">
               <AlertCircle className="h-3 w-3" />
               <span>{fieldErrors.userName}</span>
             </p>
@@ -356,15 +243,16 @@ const Register = () => {
             placeholder="Email"
             value={formData.email}
             onChange={(e) => handleInputChange("email", e.target.value)}
-            className={`w-full px-4 py-2 border rounded-lg transition-colors ${
-              fieldErrors.email 
-                ? "border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-200" 
-                : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
-            } focus:outline-none focus:ring-2`}
+            className={`w-full px-4 py-2 border rounded-lg transition-colors 
+              ${fieldErrors.email 
+                ? "border-red-500 bg-red-50 dark:bg-red-900 focus:border-red-500 focus:ring-red-200" 
+                : "border-brown-300 dark:border-brown-500 focus:border-brown-500 dark:focus:border-brown-400 focus:ring-brown-200 dark:focus:ring-brown-600"
+              } 
+              bg-off-white dark:bg-brown-800 text-brown-dark dark:text-off-white focus:outline-none focus:ring-2`}
             required
           />
           {fieldErrors.email && (
-            <p className="text-red-500 text-xs mt-1 flex items-center space-x-1">
+            <p className="text-red-500 dark:text-red-300 text-xs mt-1 flex items-center space-x-1">
               <AlertCircle className="h-3 w-3" />
               <span>{fieldErrors.email}</span>
             </p>
@@ -379,17 +267,18 @@ const Register = () => {
               placeholder="Password"
               value={formData.password}
               onChange={(e) => handleInputChange("password", e.target.value)}
-              className={`w-full px-4 py-2 pr-12 border rounded-lg transition-colors ${
-                fieldErrors.password 
-                  ? "border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-200" 
-                  : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
-              } focus:outline-none focus:ring-2`}
+              className={`w-full px-4 py-2 pr-12 border rounded-lg transition-colors 
+                ${fieldErrors.password 
+                  ? "border-red-500 bg-red-50 dark:bg-red-900 focus:border-red-500 focus:ring-red-200" 
+                  : "border-brown-300 dark:border-brown-500 focus:border-brown-500 dark:focus:border-brown-400 focus:ring-brown-200 dark:focus:ring-brown-600"
+                } 
+                bg-off-white dark:bg-brown-800 text-brown-dark dark:text-off-white focus:outline-none focus:ring-2`}
               required
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-brown-500 dark:text-brown-300 hover:text-brown-700 dark:hover:text-brown-100 focus:outline-none"
             >
               {showPassword ? (
                 <EyeOff className="h-4 w-4" />
@@ -403,7 +292,7 @@ const Register = () => {
           {formData.password && (
             <div className="mt-2">
               <div className="flex items-center space-x-2 mb-1">
-                <div className="flex-1 bg-gray-200 rounded-full h-2">
+                <div className="flex-1 bg-brown-200 dark:bg-brown-600 rounded-full h-2">
                   <div 
                     className={`h-2 rounded-full transition-all duration-300 ${
                       passwordStrength.strength <= 2 ? 'bg-red-500' :
@@ -416,25 +305,25 @@ const Register = () => {
                   {passwordStrength.label}
                 </span>
               </div>
-              <div className="text-xs text-gray-600 space-y-1">
+              <div className="text-xs text-brown-mid dark:text-off-white-dark space-y-1">
                 <div className="grid grid-cols-2 gap-1">
-                  <div className={`flex items-center space-x-1 ${formData.password.length >= 8 ? 'text-green-600' : 'text-gray-400'}`}>
+                  <div className={`flex items-center space-x-1 ${formData.password.length >= 8 ? 'text-green-600' : 'text-brown-400 dark:text-brown-300'}`}>
                     <CheckCircle className="h-3 w-3" />
                     <span>8+ chars</span>
                   </div>
-                  <div className={`flex items-center space-x-1 ${/[A-Z]/.test(formData.password) ? 'text-green-600' : 'text-gray-400'}`}>
+                  <div className={`flex items-center space-x-1 ${/[A-Z]/.test(formData.password) ? 'text-green-600' : 'text-brown-400 dark:text-brown-300'}`}>
                     <CheckCircle className="h-3 w-3" />
                     <span>Uppercase</span>
                   </div>
-                  <div className={`flex items-center space-x-1 ${/[a-z]/.test(formData.password) ? 'text-green-600' : 'text-gray-400'}`}>
+                  <div className={`flex items-center space-x-1 ${/[a-z]/.test(formData.password) ? 'text-green-600' : 'text-brown-400 dark:text-brown-300'}`}>
                     <CheckCircle className="h-3 w-3" />
                     <span>Lowercase</span>
                   </div>
-                  <div className={`flex items-center space-x-1 ${/\d/.test(formData.password) ? 'text-green-600' : 'text-gray-400'}`}>
+                  <div className={`flex items-center space-x-1 ${/\d/.test(formData.password) ? 'text-green-600' : 'text-brown-400 dark:text-brown-300'}`}>
                     <CheckCircle className="h-3 w-3" />
                     <span>Number</span>
                   </div>
-                  <div className={`flex items-center space-x-1 ${/[@$!%*?&]/.test(formData.password) ? 'text-green-600' : 'text-gray-400'}`}>
+                  <div className={`flex items-center space-x-1 ${/[@$!%*?&]/.test(formData.password) ? 'text-green-600' : 'text-brown-400 dark:text-brown-300'}`}>
                     <CheckCircle className="h-3 w-3" />
                     <span>Special</span>
                   </div>
@@ -444,7 +333,7 @@ const Register = () => {
           )}
           
           {fieldErrors.password && (
-            <p className="text-red-500 text-xs mt-1 flex items-center space-x-1">
+            <p className="text-red-500 dark:text-red-300 text-xs mt-1 flex items-center space-x-1">
               <AlertCircle className="h-3 w-3" />
               <span>{fieldErrors.password}</span>
             </p>
@@ -456,12 +345,13 @@ const Register = () => {
           <select
             value={formData.role}
             onChange={(e) => handleRoleChange(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:border-blue-500 focus:ring-blue-200"
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 
+              border-brown-300 dark:border-brown-500 focus:border-brown-500 dark:focus:border-brown-400 focus:ring-brown-200 dark:focus:ring-brown-600
+              bg-off-white dark:bg-brown-800 text-brown-dark dark:text-off-white"
             required
           >
             <option value="reader">Reader</option>
             <option value="author">Author</option>
-            <option value="admin">Admin</option>
           </select>
         </div>
 
@@ -472,25 +362,26 @@ const Register = () => {
               placeholder="Author Bio (Tell readers about yourself, your writing style, experience, etc.)"
               value={formData.bio}
               onChange={(e) => handleInputChange("bio", e.target.value)}
-              className={`w-full px-4 py-2 border rounded-lg h-24 resize-none transition-colors ${
-                fieldErrors.bio 
-                  ? "border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-200" 
-                  : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
-              } focus:outline-none focus:ring-2`}
+              className={`w-full px-4 py-2 border rounded-lg h-24 resize-none transition-colors 
+                ${fieldErrors.bio 
+                  ? "border-red-500 bg-red-50 dark:bg-red-900 focus:border-red-500 focus:ring-red-200" 
+                  : "border-brown-300 dark:border-brown-500 focus:border-brown-500 dark:focus:border-brown-400 focus:ring-brown-200 dark:focus:ring-brown-600"
+                } 
+                bg-off-white dark:bg-brown-800 text-brown-dark dark:text-off-white focus:outline-none focus:ring-2`}
               required
             />
             <div className="flex justify-between items-center mt-1">
-              <div className="text-xs text-gray-500">
+              <div className="text-xs text-brown-500 dark:text-brown-300">
                 {formData.bio.length}/500 characters
               </div>
               {formData.bio && (
-                <div className={`text-xs ${formData.bio.length >= 50 ? 'text-green-600' : 'text-gray-400'}`}>
-                  {formData.bio.length >= 50 ? '✓ Minimum reached' : `${50 - formData.bio.length} more needed`}
+                <div className="text-xs text-brown-mid dark:text-off-white-dark">
+                  {formData.bio.length >= 50 ? <span className="text-green-600">✓ Minimum reached</span> : `${50 - formData.bio.length} more needed`}
                 </div>
               )}
             </div>
             {fieldErrors.bio && (
-              <p className="text-red-500 text-xs mt-1 flex items-center space-x-1">
+              <p className="text-red-500 dark:text-red-300 text-xs mt-1 flex items-center space-x-1">
                 <AlertCircle className="h-3 w-3" />
                 <span>{fieldErrors.bio}</span>
               </p>
@@ -500,16 +391,16 @@ const Register = () => {
 
         {/* Reader Subscription */}
         {formData.role === "reader" && (
-          <label className="text-sm flex items-start gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200 cursor-pointer hover:bg-blue-100 transition-colors">
+          <label className="text-sm flex items-start gap-3 p-3 bg-off-white dark:bg-brown-800 rounded-lg border border-brown-200 dark:border-brown-600 cursor-pointer hover:bg-off-white-dark dark:hover:bg-brown-700 transition-colors">
             <input
               type="checkbox"
               checked={formData.isSubscribed}
               onChange={(e) => handleInputChange("isSubscribed", e.target.checked)}
-              className="mt-0.5 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              className="mt-0.5 h-4 w-4 text-brown-600 focus:ring-brown-500 border-brown-300 dark:border-brown-500 rounded"
             />
             <div>
-              <div className="font-medium text-blue-900">Subscribe to Premium Content</div>
-              <div className="text-blue-700 text-xs mt-1">
+              <div className="font-medium text-brown-900 dark:text-off-white">Subscribe to Premium Content</div>
+              <div className="text-brown-700 dark:text-brown-300 text-xs mt-1">
                 Get access to exclusive books, newsletters, and premium features
               </div>
             </div>
@@ -519,7 +410,7 @@ const Register = () => {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-black text-white py-2 rounded-xl hover:bg-gray-900 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+          className="w-full bg-brown-600 text-white py-2 rounded-xl hover:bg-brown-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
         >
           {isLoading ? (
             <>
@@ -531,11 +422,11 @@ const Register = () => {
           )}
         </button>
 
-        <div className="text-sm text-center">
+        <div className="text-sm text-center text-brown-dark dark:text-off-white">
           Already have an account?{" "}
-          <a href="/login" className="text-blue-600 hover:underline">
+          <Link to="/login" className="text-brown-600 dark:text-brown-400 hover:underline">
             Login
-          </a>
+          </Link>
         </div>
       </form>
     </div>
