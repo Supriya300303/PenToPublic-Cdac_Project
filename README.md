@@ -7,7 +7,7 @@ PenToPublic is a full-stack web application that allows **Authors** to publish b
 ## ⚙️ Tech Stack
 
 ### 🖥 Frontend
-- ReactJS (Vite)
+- ReactJS 
 - Tailwind CSS
 - React Router
 - Axios
