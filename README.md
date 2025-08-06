@@ -1,6 +1,6 @@
 # 📚 PenToPublic – Online Book Publishing & Reading Platform
 
-Bookies is a full-stack web application that allows **Authors** to publish books/eBooks, **Readers** to buy or rent and read them, and **Admins** to monitor platform activity and user analytics.
+PenToPublic is a full-stack web application that allows **Authors** to publish books/eBooks, **Readers** to read them, and **Admins** to monitor platform activity and user analytics.
 
 ---
 
@@ -19,7 +19,7 @@ Bookies is a full-stack web application that allows **Authors** to publish books
 - AutoMapper
 
 ### 🗃 Database
-- MySQL or PostgreSQL
+- MySQL
 
 ### ☁ Deployment
 - Docker (Multi-container)
@@ -32,7 +32,7 @@ Bookies is a full-stack web application that allows **Authors** to publish books
 | Role    | Permissions |
 |---------|-------------|
 | Author  | Publish & manage books |
-| Reader  | Buy, rent, and read books |
+| Reader  | read book, subscribe, listen to audiobook, review |
 | Admin   | View analytics and manage users |
 
 ---
@@ -40,9 +40,9 @@ Bookies is a full-stack web application that allows **Authors** to publish books
 ## 📌 Key Features
 
 - 🔐 Secure Login (JWT) with Role-based Access
-- 📖 Book Publishing, Renting & Buying
+- 📖 Book Publishing
 - 📊 Track Reading Progress (% read)
-- 💳 Payment Integration (Mock/Stripe-ready)
+- 💳 Payment Integration (Razorpay)
 - 📚 Book Categorization
 - 🧾 Admin Analytics Dashboard
 
