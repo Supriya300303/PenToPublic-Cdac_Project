@@ -7,7 +7,7 @@ Bookies is a full-stack web application that allows **Authors** to publish books
 ## ⚙️ Tech Stack
 
 ### 🖥 Frontend
-- ReactJS 
+- vite+ReactJS 
 - Tailwind CSS
 - React Router
 - Axios
@@ -19,7 +19,7 @@ Bookies is a full-stack web application that allows **Authors** to publish books
 - AutoMapper
 
 ### 🗃 Database
-- MySQL or PostgreSQL
+- Ms-Sql
 
 ### ☁ Deployment
 - Docker (Multi-container)
@@ -32,7 +32,7 @@ Bookies is a full-stack web application that allows **Authors** to publish books
 | Role    | Permissions |
 |---------|-------------|
 | Author  | Publish & manage books |
-| Reader  | Buy, rent, and read books |
+| Reader  | read, subscribe, listen audiobook if available |
 | Admin   | View analytics and manage users |
 
 ---
@@ -40,9 +40,9 @@ Bookies is a full-stack web application that allows **Authors** to publish books
 ## 📌 Key Features
 
 - 🔐 Secure Login (JWT) with Role-based Access
-- 📖 Book Publishing, Renting & Buying
+- 📖 Book Publishing
 - 📊 Track Reading Progress (% read)
-- 💳 Payment Integration (Mock/Stripe-ready)
+- 💳 Payment Integration (RazorPay)
 - 📚 Book Categorization
 - 🧾 Admin Analytics Dashboard
 
