@@ -23,7 +23,7 @@ Bookies is a full-stack web application that allows **Authors** to publish books
 
 ### ☁ Deployment
 - Docker (Multi-container)
-- AWS EC2 (App hosting) & RDS (Database)
+- Azure
 
 ---
 
